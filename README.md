@@ -381,33 +381,33 @@ npm run dev  # starts on http://localhost:3000
 
 ```bash
 # 1. Set up testnet account
-stellar keys generate rishii --network testnet
-stellar keys fund rishii --network testnet   # Friendbot funds it
+stellar keys generate shritii --network testnet
+stellar keys fund shritii --network testnet   # Friendbot funds it
 
 # 2. Deploy factory
 stellar contract deploy \
   --wasm contracts/factory/target/wasm32-unknown-unknown/release/factory.wasm \
-  --source rishii --network testnet --alias factory
+  --source shritii --network testnet --alias factory
 
 # 3. Deploy pool implementation
 stellar contract deploy \
   --wasm contracts/pool/target/wasm32-unknown-unknown/release/pool.wasm \
-  --source rishii --network testnet --alias pool_impl
+  --source shritii --network testnet --alias pool_impl
 
 # 4. Deploy position manager
 stellar contract deploy \
   --wasm contracts/position_manager/target/wasm32-unknown-unknown/release/position_manager.wasm \
-  --source rishii --network testnet --alias position_manager
+  --source shritii --network testnet --alias position_manager
 
 # 5. Deploy router
 stellar contract deploy \
   --wasm contracts/router/target/wasm32-unknown-unknown/release/router.wasm \
-  --source rishii --network testnet --alias router
+  --source shritii --network testnet --alias router
 
 # 6. Deploy user profile contract
 stellar contract deploy \
   --wasm contracts/user_profile/target/wasm32-unknown-unknown/release/user_profile.wasm \
-  --source rishii --network testnet --alias user_profile
+  --source shritii --network testnet --alias user_profile
 
 # 7. Initialize the XLM/USDC pool at the live market price
 npx ts-node scripts/init-pool.ts
