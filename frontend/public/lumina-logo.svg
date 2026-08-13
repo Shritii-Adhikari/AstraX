@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <defs>
+    <linearGradient id="lumina-primary" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="50%" stop-color="#7C5CFF"/>
+      <stop offset="100%" stop-color="#E052FF"/>
+    </linearGradient>
+    <linearGradient id="lumina-glow" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#7C5CFF" stop-opacity="0.2"/>
+    </linearGradient>
+    <radialGradient id="lumina-core" cx="24" cy="24" r="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#7C5CFF"/>
+    </radialGradient>
+    <filter id="lumina-blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="24" cy="24" r="20" fill="url(#lumina-glow)" filter="url(#lumina-blur)" opacity="0.4"/>
+
+  <!-- Outer Stellar Orbital Ring -->
+  <circle cx="24" cy="24" r="21" stroke="url(#lumina-primary)" stroke-width="2" stroke-dasharray="85 30" opacity="0.9"/>
+  <circle cx="24" cy="24" r="16" stroke="url(#lumina-primary)" stroke-width="1" stroke-dasharray="40 20" opacity="0.5" transform="rotate(45 24 24)"/>
+
+  <!-- Dual Dynamic Swap Arcs -->
+  <path d="M 24 8 A 16 16 0 0 1 40 24" stroke="url(#lumina-primary)" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="41,27 37,21 43,23" fill="#00D4FF"/>
+
+  <path d="M 24 40 A 16 16 0 0 1 8 24" stroke="url(#lumina-primary)" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="7,21 11,27 5,25" fill="#E052FF"/>
+
+  <!-- Inner Liquid Diamond Core -->
+  <path d="M 24 14 L 32 24 L 24 34 L 16 24 Z" fill="url(#lumina-core)" opacity="0.85"/>
+  <circle cx="24" cy="24" r="4" fill="#FFFFFF"/>
+</svg>

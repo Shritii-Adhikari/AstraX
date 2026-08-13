@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -41,9 +40,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), "JetBrains Mono", monospace;
-  --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
+  --font-sans: var(--font-geist), "Geist", "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", monospace;
+  --font-display: var(--font-geist), "Geist", "Inter", system-ui, sans-serif;
   --color-brand: #3D81E3;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -197,7 +196,7 @@ body {
 #app-shell {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-instrument), "Instrument Sans", system-ui, sans-serif;
+  font-family: var(--font-geist), "Geist", "Inter", system-ui, sans-serif;
 }
 
 ::-webkit-scrollbar { width: 6px; }

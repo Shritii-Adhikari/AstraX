@@ -1,32 +1,30 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Providers from "@/context/Providers";
 import WalletModal from "@/components/wallet/WalletModal";
 import TxStatusModal from "@/components/wallet/TxStatusModal";
 
-const instrumentSans = Instrument_Sans({
-  subsets: ["latin"],
-  variable: "--font-instrument",
+const geist = localFont({
+  src: "./fonts/geist-sans.woff2",
+  variable: "--font-geist",
+  display: "swap",
+  weight: "100 900",
 });
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-instrument-serif",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
+const geistMono = localFont({
+  src: "./fonts/geist-mono.woff2",
+  variable: "--font-geist-mono",
+  display: "swap",
+  weight: "100 900",
 });
 
 export const metadata: Metadata = {
-  title: "LuminaDex — Stellar CLMM DEX",
+  title: "AstraX | Concentrated Liquidity on Stellar",
   description:
-    "Trade with concentrated liquidity, tight spreads, and instant settlement — fully non-custodial on Stellar Soroban.",
+    "AstraX is a concentrated liquidity DEX for XLM and USDC, built on Stellar Soroban.",
   icons: {
-    icon: "/lumina-logo.svg",
+    icon: "/astrax-chrome-a.png",
   },
 };
 
@@ -38,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <Providers>
           {children}
