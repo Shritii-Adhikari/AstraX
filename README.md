@@ -13,6 +13,7 @@
 </div>
 
 ---
+<img width="1917" height="903" alt="image" src="https://github.com/user-attachments/assets/c39a091c-cb0f-4bc7-9734-498dea288f93" />
 
 
 
@@ -27,7 +28,7 @@ A CLMM DEX allows Liquidity Providers (LPs) to deposit liquidity into **discrete
 
 | Resource | Link |
 |----------|------|
-| **Live Demo** |  |
+| **Live Demo** | https://astra-x-phi.vercel.app/  |
 | **User Profile Contract** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CDCTJGULUEJSL3DBJQYD7DVQEA52J7QZDGY5EPDVIODBJQW532O3675U) |
 | **transaction activity** | [transaction ](https://stellar.expert/explorer/testnet/account/GCVE5QXJ33NFGVMUCGUTTUVJQ7F6O4G6OPLCIU5O6OQXPYNORGDP3UIY) |
 
