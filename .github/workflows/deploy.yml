@@ -1,0 +1,124 @@
+name: CD
+
+# Deploys on every push to main. Contracts deploy first; the frontend deploy
+# depends on it so the UI always ships against a known-good contract build.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # ────────────────────── Deploy smart contract ──────────────────────
+  deploy-contract:
+    name: Deploy contract (Stellar testnet)
+    runs-on: ubuntu-latest
+    environment: testnet
+    defaults:
+      run:
+        working-directory: contracts
+    outputs:
+      factory_id: ${{ steps.deploy.outputs.factory_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain (+ wasm32 target)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache cargo build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: contracts
+
+      # Fallback system libs in case binstall has to compile from source
+      # (stellar-cli's hardware-wallet/keyring crates link dbus-1 and libudev).
+      - name: Install Stellar CLI build deps
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev libudev-dev pkg-config
+
+      - name: Install cargo-binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      # Pulls the prebuilt stellar binary — no native compilation needed.
+      - name: Install Stellar CLI
+        run: cargo binstall --no-confirm stellar-cli
+
+      - name: Build contracts (wasm release)
+        run: cargo build --target wasm32-unknown-unknown --release
+
+      - name: Deploy factory contract
+        id: deploy
+        env:
+          STELLAR_SECRET_KEY: ${{ secrets.STELLAR_SECRET_KEY }}
+        run: |
+          if [ -z "$STELLAR_SECRET_KEY" ]; then
+            echo "::warning::STELLAR_SECRET_KEY not set — skipping contract deploy. Add it to the 'testnet' environment (Settings → Environments → testnet → Secrets) to enable deploys."
+            exit 0
+          fi
+          FACTORY_ID=$(stellar contract deploy \
+            --wasm target/wasm32-unknown-unknown/release/factory.wasm \
+            --source-account "$STELLAR_SECRET_KEY" \
+            --network testnet)
+          echo "Deployed factory: $FACTORY_ID"
+          echo "factory_id=$FACTORY_ID" >> "$GITHUB_OUTPUT"
+          # Pools are created on-chain via factory.deploy_pool (see scripts/redeploy.sh).
+
+  # ───────────────────────── Deploy frontend ─────────────────────────
+ deploy-frontend:
+  name: Deploy frontend (Vercel)
+  runs-on: ubuntu-latest
+  needs: [deploy-contract]
+  environment: production
+
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install dependencies
+      working-directory: frontend
+      run: npm ci
+
+    - name: Build
+      working-directory: frontend
+      env:
+        NEXT_PUBLIC_STELLAR_NETWORK: ${{ secrets.NEXT_PUBLIC_STELLAR_NETWORK }}
+        NEXT_PUBLIC_RPC_URL: ${{ secrets.NEXT_PUBLIC_RPC_URL }}
+        NEXT_PUBLIC_HORIZON_URL: ${{ secrets.NEXT_PUBLIC_HORIZON_URL }}
+        NEXT_PUBLIC_NETWORK_PASSPHRASE: ${{ secrets.NEXT_PUBLIC_NETWORK_PASSPHRASE }}
+        NEXT_PUBLIC_FACTORY_ADDRESS: ${{ secrets.NEXT_PUBLIC_FACTORY_ADDRESS }}
+        NEXT_PUBLIC_POOL_ADDRESS: ${{ secrets.NEXT_PUBLIC_POOL_ADDRESS }}
+        NEXT_PUBLIC_ROUTER_ADDRESS: ${{ secrets.NEXT_PUBLIC_ROUTER_ADDRESS }}
+        NEXT_PUBLIC_POSITION_MANAGER_ADDRESS: ${{ secrets.NEXT_PUBLIC_POSITION_MANAGER_ADDRESS }}
+        NEXT_PUBLIC_PROFILE_CONTRACT_ADDRESS: ${{ secrets.NEXT_PUBLIC_PROFILE_CONTRACT_ADDRESS }}
+        NEXT_PUBLIC_XLM_ADDRESS: ${{ secrets.NEXT_PUBLIC_XLM_ADDRESS }}
+        NEXT_PUBLIC_USDC_ADDRESS: ${{ secrets.NEXT_PUBLIC_USDC_ADDRESS }}
+        NEXT_PUBLIC_USDC_ISSUER: ${{ secrets.NEXT_PUBLIC_USDC_ISSUER }}
+        NEXT_PUBLIC_USDC_ASSET_CODE: ${{ secrets.NEXT_PUBLIC_USDC_ASSET_CODE }}
+        NEXT_PUBLIC_EXPLORER_BASE_URL: ${{ secrets.NEXT_PUBLIC_EXPLORER_BASE_URL }}
+      run: npm run build
+
+    - name: Deploy to Vercel
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: |
+        npx vercel pull \
+          --yes \
+          --environment=production \
+          --token="$VERCEL_TOKEN"
+
+        npx vercel build \
+          --prod \
+          --token="$VERCEL_TOKEN"
+
+        npx vercel deploy \
+          --prebuilt \
+          --prod \
+          --token="$VERCEL_TOKEN"

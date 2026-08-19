@@ -1,0 +1,87 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  # ───────────────────────── Smart contracts ─────────────────────────
+  contracts:
+    name: Smart contracts (test + wasm build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain (+ wasm32 target)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+      - name: Cache cargo build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: contracts
+      - name: Format check
+        run: cargo fmt --all --check
+      - name: Run contract tests
+        run: cargo test
+      - name: Build contracts (wasm release)
+        run: cargo build --target wasm32-unknown-unknown --release
+      - name: Upload wasm artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-wasm
+          path: contracts/target/wasm32-unknown-unknown/release/*.wasm
+          if-no-files-found: error
+
+  # ───────────────────────────── Frontend ─────────────────────────────
+  frontend:
+    name: Frontend (lint + typecheck + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Build
+        env:
+          NEXT_PUBLIC_STELLAR_NETWORK: ${{ secrets.NEXT_PUBLIC_STELLAR_NETWORK }}
+          NEXT_PUBLIC_RPC_URL: ${{ secrets.NEXT_PUBLIC_RPC_URL }}
+          NEXT_PUBLIC_HORIZON_URL: ${{ secrets.NEXT_PUBLIC_HORIZON_URL }}
+          NEXT_PUBLIC_NETWORK_PASSPHRASE: ${{ secrets.NEXT_PUBLIC_NETWORK_PASSPHRASE }}
+          NEXT_PUBLIC_FACTORY_ADDRESS: ${{ secrets.NEXT_PUBLIC_FACTORY_ADDRESS }}
+          NEXT_PUBLIC_POOL_ADDRESS: ${{ secrets.NEXT_PUBLIC_POOL_ADDRESS }}
+          NEXT_PUBLIC_ROUTER_ADDRESS: ${{ secrets.NEXT_PUBLIC_ROUTER_ADDRESS }}
+          NEXT_PUBLIC_POSITION_MANAGER_ADDRESS: ${{ secrets.NEXT_PUBLIC_POSITION_MANAGER_ADDRESS }}
+          NEXT_PUBLIC_PROFILE_CONTRACT_ADDRESS: ${{ secrets.NEXT_PUBLIC_PROFILE_CONTRACT_ADDRESS }}
+          NEXT_PUBLIC_XLM_ADDRESS: ${{ secrets.NEXT_PUBLIC_XLM_ADDRESS }}
+          NEXT_PUBLIC_USDC_ADDRESS: ${{ secrets.NEXT_PUBLIC_USDC_ADDRESS }}
+          NEXT_PUBLIC_USDC_ISSUER: ${{ secrets.NEXT_PUBLIC_USDC_ISSUER }}
+          NEXT_PUBLIC_USDC_ASSET_CODE: ${{ secrets.NEXT_PUBLIC_USDC_ASSET_CODE }}
+          NEXT_PUBLIC_EXPLORER_BASE_URL: ${{ secrets.NEXT_PUBLIC_EXPLORER_BASE_URL }}
+        run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/.next
+          include-hidden-files: true
+          if-no-files-found: error
