@@ -40,9 +40,9 @@ A CLMM DEX allows Liquidity Providers (LPs) to deposit liquidity into **discrete
 ---
 
 
-## ✅ Level 3 Submission Checklist
+## ✅ Level 4 Submission Checklist
 
-All required Level 5 deliverables have been completed and verified below.
+All required Level 4 deliverables have been completed and verified below.
 
 | Requirement | Status | Evidence / Verification |
 | :--- | :---: | :--- |
