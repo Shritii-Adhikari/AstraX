@@ -12,62 +12,62 @@ export function LogoMark({ className = "w-8 h-8", size }: LogoProps) {
   const style = size ? { width: size, height: size } : undefined;
   return (
     <svg
-      viewBox="0 0 48 48"
+      viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       style={style}
     >
       <defs>
-        <linearGradient id="lumina-primary-react" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#00D4FF" />
-          <stop offset="50%" stopColor="#7C5CFF" />
-          <stop offset="100%" stopColor="#E052FF" />
+        <linearGradient id="astrax-logo-grad" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#48A7FF" />
+          <stop offset="100%" stopColor="#1476FF" />
         </linearGradient>
-        <radialGradient id="lumina-core-react" cx="24" cy="24" r="12" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#00D4FF" />
-          <stop offset="100%" stopColor="#7C5CFF" />
-        </radialGradient>
       </defs>
-
-      {/* Outer Orbit Ring */}
-      <circle cx="24" cy="24" r="21" stroke="url(#lumina-primary-react)" strokeWidth="2" strokeDasharray="85 30" opacity="0.9" />
-      <circle cx="24" cy="24" r="16" stroke="url(#lumina-primary-react)" strokeWidth="1" strokeDasharray="40 20" opacity="0.4" transform="rotate(45 24 24)" />
-
-      {/* Dual Swap Arcs */}
-      <path d="M 24 8 A 16 16 0 0 1 40 24" stroke="url(#lumina-primary-react)" strokeWidth="3" strokeLinecap="round" />
-      <polygon points="41,27 37,21 43,23" fill="#00D4FF" />
-
-      <path d="M 24 40 A 16 16 0 0 1 8 24" stroke="url(#lumina-primary-react)" strokeWidth="3" strokeLinecap="round" />
-      <polygon points="7,21 11,27 5,25" fill="#E052FF" />
-
-      {/* Inner Liquid Diamond Core */}
-      <path d="M 24 14 L 32 24 L 24 34 L 16 24 Z" fill="url(#lumina-core-react)" opacity="0.85" />
-      <circle cx="24" cy="24" r="3.5" fill="#FFFFFF" />
+      {/* 4-pointed stellar star */}
+      <path
+        d="M16 2.5L19.2 12.8L29.5 16L19.2 19.2L16 29.5L12.8 19.2L2.5 16L12.8 12.8L16 2.5Z"
+        fill="url(#astrax-logo-grad)"
+      />
+      {/* Core highlight */}
+      <circle cx="16" cy="16" r="2.5" fill="#FFFFFF" />
+      {/* Precision corner ticks */}
+      <path
+        d="M8 8L10.5 10.5M24 24L21.5 21.5M24 8L21.5 10.5M8 24L10.5 21.5"
+        stroke="#48A7FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.8"
+      />
     </svg>
   );
 }
 
-export default function LuminaLogo({ href = "/", markSize = 32, showText = true }: { href?: string; markSize?: number; showText?: boolean }) {
+export function AstraxLogo({
+  href = "/",
+  markSize = 32,
+  showText = true,
+}: {
+  href?: string;
+  markSize?: number;
+  showText?: boolean;
+}) {
   return (
-    <Link href={href} className="no-underline flex items-center gap-2.5 group cursor-pointer select-none">
+    <Link
+      href={href}
+      className="no-underline flex items-center gap-3 group cursor-pointer select-none"
+    >
       <div className="relative flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
         <LogoMark size={markSize} className="w-8 h-8" />
       </div>
       {showText && (
-        <span className="font-extrabold tracking-tight text-white text-lg flex items-center gap-0.5">
-          <span>Lumina</span>
-          <span
-            style={{
-              background: "linear-gradient(135deg, #00d4ff 0%, #7c5cff 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            DEX
-          </span>
+        <span className="font-semibold tracking-[0.2em] text-white text-sm md:text-[15px] uppercase">
+          ASTRAX
         </span>
       )}
     </Link>
   );
 }
+
+export default AstraxLogo;
+export const LuminaLogo = AstraxLogo;

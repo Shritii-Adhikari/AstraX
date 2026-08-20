@@ -5,6 +5,15 @@ import Providers from "@/context/Providers";
 import WalletModal from "@/components/wallet/WalletModal";
 import TxStatusModal from "@/components/wallet/TxStatusModal";
 
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 const geist = localFont({
   src: "./fonts/geist-sans.woff2",
   variable: "--font-geist",
@@ -36,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${geist.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <Providers>
           {children}

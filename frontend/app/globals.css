@@ -16,57 +16,34 @@
   --text-primary: var(--foreground);
   --text-secondary: var(--muted-foreground);
 
-  /* Landing page design tokens (shadcn/ui) */
-  --background: #0a0a0f;
+  /* Landing page design tokens */
+  --background: #050505;
   --foreground: #f0f0f5;
-  --card: #111118;
+  --card: #0c0d14;
   --card-foreground: #f0f0f5;
   --popover: #111118;
   --popover-foreground: #f0f0f5;
-  --primary: #7c5cff;
+  --primary: #1476FF;
   --primary-foreground: #ffffff;
   --secondary: #111118;
   --secondary-foreground: #f0f0f5;
   --muted: rgba(255, 255, 255, 0.04);
   --muted-foreground: #8888a8;
-  --accent-landing: #c8a0e0;
-  --accent-landing-foreground: #0a0a0f;
+  --accent-landing: #1476FF;
+  --accent-landing-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
   --border-landing: rgba(255, 255, 255, 0.08);
   --input-landing: rgba(255, 255, 255, 0.03);
-  --ring: #7c5cff;
-  --radius: 0.25rem;
+  --ring: #1476FF;
+  --radius: 0.5rem;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist), "Geist", "Inter", system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-geist), "Inter", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), "Geist Mono", monospace;
-  --font-display: var(--font-geist), "Geist", "Inter", system-ui, sans-serif;
-  --color-brand: #3D81E3;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent-landing);
-  --color-accent-foreground: var(--accent-landing-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border-landing);
-  --color-input: var(--input-landing);
-  --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --font-display: var(--font-inter), var(--font-geist), "Inter", system-ui, sans-serif;
+  --color-brand: #1476FF;
 }
 
 @layer base {
@@ -75,14 +52,9 @@
     margin: 0;
     padding: 0;
   }
-  main[data-landing] * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    scroll-behavior: smooth;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 

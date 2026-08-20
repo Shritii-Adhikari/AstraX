@@ -53,7 +53,7 @@ export default function Navbar() {
         <Link
           href="/"
           className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-black shrink-0 hover:scale-105 transition-transform duration-200 shadow-md group cursor-pointer"
-          title="LuminaDex Home"
+          title="AstraX Home"
         >
           <LogoMark className="w-6 h-6 text-black group-hover:rotate-12 transition-transform duration-300" />
         </Link>
