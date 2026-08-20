@@ -28,7 +28,7 @@ import { useMarket24h, useSpotPrices } from "@/hooks/useMarketData";
 import { usePool } from "@/hooks/usePool";
 import { usePoolReserves } from "@/hooks/usePoolStats";
 import { FEE_TIER } from "@/lib/stellar/assets";
-import chromeA from "@/public/astrax-chrome-a.png";
+
 import styles from "./astrax-landing.module.css";
 
 const navigation = [
@@ -302,7 +302,7 @@ export function AuraLanding() {
 
               <div className={styles.heroVisual} aria-label="Polished chrome AstraX sculpture">
                 <Image
-                  src={chromeA}
+                  src="/astrax-chrome-a.png"
                   alt="Abstract polished chrome sculpture shaped like the AstraX letter A"
                   sizes="(max-width: 840px) 92vw, 46vw"
                   preload
